@@ -32,6 +32,7 @@ class EventScreen extends StatelessWidget {
                     ),
                   ),
                   CustomButton(
+                    inverse: true,
                     onPressed: () {
                       showDialog(
                         context: context,

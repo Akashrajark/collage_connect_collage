@@ -13,6 +13,7 @@ class EventDetailScreen extends StatelessWidget {
         appBar: AppBar(
           actions: [
             CustomButton(
+              inverse: true,
               onPressed: () {
                 showDialog(
                   context: context,
@@ -20,7 +21,6 @@ class EventDetailScreen extends StatelessWidget {
                 );
               },
               label: 'Add Item',
-              color: Colors.white,
               iconData: Icons.add,
             ),
             SizedBox(

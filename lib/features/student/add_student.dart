@@ -111,6 +111,7 @@ class AddStudent extends StatelessWidget {
             height: 30,
           ),
           CustomButton(
+            inverse: true,
             onPressed: () {},
             label: 'Add Canteen',
           )

@@ -42,6 +42,7 @@ class StudentScreen extends StatelessWidget {
                     width: 20,
                   ),
                   CustomButton(
+                    inverse: true,
                     onPressed: () {
                       showDialog(
                         context: context,
