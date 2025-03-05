@@ -42,7 +42,6 @@ class StudentScreen extends StatelessWidget {
                     width: 20,
                   ),
                   CustomButton(
-                    color: Colors.white,
                     onPressed: () {
                       showDialog(
                         context: context,

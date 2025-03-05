@@ -39,7 +39,6 @@ class EventScreen extends StatelessWidget {
                       );
                     },
                     label: 'Add Event',
-                    color: Colors.white,
                     iconData: Icons.add,
                   ),
                 ],

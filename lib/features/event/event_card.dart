@@ -42,7 +42,7 @@ class EventCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
-                    "Soccer Game",
+                    "Cycle Rally",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

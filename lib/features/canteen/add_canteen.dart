@@ -99,7 +99,6 @@ class AddCanteen extends StatelessWidget {
             height: 30,
           ),
           CustomButton(
-            color: Colors.white,
             onPressed: () {},
             label: 'Add Canteen',
           )

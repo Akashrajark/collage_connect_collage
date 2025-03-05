@@ -1,4 +1,4 @@
-import 'package:collage_connect_collage/features/home/home_screen.dart';
+import 'package:collage_connect_collage/features/login/login_screen.dart';
 import 'package:collage_connect_collage/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: appTheme,
-      home: HomeScreen(),
+      home: Loginscreen(),
     );
   }
 }

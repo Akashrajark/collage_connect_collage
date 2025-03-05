@@ -12,7 +12,7 @@ void checkLogin(BuildContext context) {
         (currentUser.appMetadata['role'] == 'admin'))) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => LoginScreen(),
+          builder: (context) => Loginscreen(),
         ),
       );
     }

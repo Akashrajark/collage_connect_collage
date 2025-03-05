@@ -40,7 +40,6 @@ class CanteenScreen extends StatelessWidget {
                       );
                     },
                     label: 'Add Canteen',
-                    color: Colors.white,
                     iconData: Icons.add,
                   )
                 ],
