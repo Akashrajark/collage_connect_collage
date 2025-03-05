@@ -130,7 +130,7 @@ class Loginscreen extends StatefulWidget {
 class _LoginScreenState extends State<Loginscreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isObscure = true;
 
   @override
@@ -177,96 +177,102 @@ class _LoginScreenState extends State<Loginscreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            Text(
-                              'Log in - Collage',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineLarge!
-                                  .copyWith(
-                                    color: Colors.white.withAlpha(220),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                              textAlign: TextAlign.left,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'Email',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: Colors.white70,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                              textAlign: TextAlign.left,
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            CustomTextFormField(
-                                labelText: 'Enter email',
-                                controller: _emailController,
-                                validator: emailValidator,
-                                isLoading: false),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              'Password',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: Colors.white70,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                              textAlign: TextAlign.left,
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            TextFormField(
-                                controller: _passwordController,
-                                obscureText: isObscure,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  suffixIcon: IconButton(
-                                      onPressed: () {
-                                        isObscure = !isObscure;
-                                        setState(() {});
-                                      },
-                                      icon: Icon(isObscure
-                                          ? Icons.visibility_off
-                                          : Icons.visibility)),
-                                  border: const OutlineInputBorder(),
-                                  labelText: 'Password',
-                                  prefixIcon: const Icon(Icons.lock),
-                                )),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            CustomButton(
-                              inverse: true,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomeScreen(),
-                                  ),
-                                );
-                              },
-                              label: 'Login',
-                            )
-                          ],
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Text(
+                                'Log in - Collage',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge!
+                                    .copyWith(
+                                      color: Colors.white.withAlpha(220),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                textAlign: TextAlign.left,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                'Email',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: Colors.white70,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                textAlign: TextAlign.left,
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              CustomTextFormField(
+                                  labelText: 'Enter email',
+                                  controller: _emailController,
+                                  validator: emailValidator,
+                                  isLoading: false),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                'Password',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: Colors.white70,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                textAlign: TextAlign.left,
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              TextFormField(
+                                  controller: _passwordController,
+                                  obscureText: isObscure,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    suffixIcon: IconButton(
+                                        onPressed: () {
+                                          isObscure = !isObscure;
+                                          setState(() {});
+                                        },
+                                        icon: Icon(isObscure
+                                            ? Icons.visibility_off
+                                            : Icons.visibility)),
+                                    border: const OutlineInputBorder(),
+                                    labelText: 'Password',
+                                    prefixIcon: const Icon(Icons.lock),
+                                  )),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              CustomButton(
+                                inverse: true,
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    BlocProvider.of<LoginBloc>(context).add(
+                                      LoginEvent(
+                                        email: _emailController.text.trim(),
+                                        password:
+                                            _passwordController.text.trim(),
+                                      ),
+                                    );
+                                  }
+                                },
+                                label: 'Login',
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
