@@ -100,20 +100,9 @@ class _HomeScreenState extends State<HomeScreen>
                         height: 20,
                       ),
                       DrawerItem(
-                        isActive: _tabController.index == 3,
-                        iconData: Icons.edit_calendar_outlined,
-                        label: 'Event',
-                        onTap: () {
-                          _tabController.animateTo(3);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      DrawerItem(
                         iconData: Icons.lock_outline_rounded,
                         label: "Change Password",
-                        isActive: _tabController.index == 4,
+                        isActive: _tabController.index == 3,
                         onTap: () {
                           showDialog(
                             context: context,
@@ -127,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen>
                       DrawerItem(
                           iconData: Icons.logout_rounded,
                           label: "Log Out",
-                          isActive: _tabController.index == 5,
+                          isActive: _tabController.index == 4,
                           onTap: () {
                             showDialog(
                               context: context,
