@@ -224,6 +224,11 @@ class _CanteenScreenState extends State<CanteenScreen> {
                                           content: Column(
                                             children: [
                                               ListTile(
+                                                leading: Image.network(
+                                                  _canteens[index]['image_url'],
+                                                  height: 200,
+                                                  fit: BoxFit.cover,
+                                                ),
                                                 title: Text(
                                                     'Name: ${_canteens[index]['name']}'),
                                                 subtitle: Column(
@@ -233,7 +238,7 @@ class _CanteenScreenState extends State<CanteenScreen> {
                                                     Text(
                                                         'Email: ${_canteens[index]['email']}'),
                                                     Text(
-                                                        'phone: ${_canteens[index]['phone']}'),
+                                                        'Reg. No.: ${_canteens[index]['phone']}'),
                                                   ],
                                                 ),
                                               ),

@@ -1,10 +1,12 @@
 import 'package:collage_connect_collage/common_widget/custom_alert_dialog.dart';
-import 'package:collage_connect_collage/common_widget/custom_button.dart';
 import 'package:collage_connect_collage/common_widget/custom_text_formfield.dart';
 import 'package:collage_connect_collage/features/canteen/categories_bloc/canteens_bloc.dart';
 import 'package:collage_connect_collage/util/value_validator.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../common_widget/custom_image_picker_button.dart';
 
 class AddCanteen extends StatefulWidget {
   final Map? canteenDetails;
@@ -27,6 +29,7 @@ class _AddCanteenState extends State<AddCanteen> {
   final _phoneController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  PlatformFile? coverImage;
 
   @override
   void initState() {
@@ -56,6 +59,18 @@ class _AddCanteenState extends State<AddCanteen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                CustomImagePickerButton(
+                  width: double.infinity,
+                  height: 200,
+                  selectedImage: widget.canteenDetails?['image_url'],
+                  onPick: (pick) {
+                    coverImage = pick;
+                    setState(() {});
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 const Text(
                   'Canteen Name',
                   style: TextStyle(
@@ -147,14 +162,18 @@ class _AddCanteenState extends State<AddCanteen> {
           ),
           primaryButton: 'save',
           onPrimaryPressed: () {
-            if (_formKey.currentState!.validate() ||
-                (widget.canteenDetails != null)) {
+            if (_formKey.currentState!.validate() &&
+                ((coverImage != null) || widget.canteenDetails != null)) {
               Map<String, dynamic> details = {
                 'name': _nameController.text.trim(),
                 'email': _emailController.text.trim(),
                 'password': _passwordController.text.trim(),
                 'phone': _phoneController.text.trim(),
               };
+              if (coverImage != null) {
+                details['image'] = coverImage!.bytes;
+                details['image_name'] = coverImage!.name;
+              }
 
               if (widget.canteenDetails != null) {
                 BlocProvider.of<CanteensBloc>(context).add(

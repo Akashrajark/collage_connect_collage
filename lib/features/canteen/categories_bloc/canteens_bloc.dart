@@ -42,12 +42,30 @@ class CanteensBloc extends Bloc<CanteensEvent, CanteensState> {
           event.canteenDetails['user_id'] = response.user!.id;
           event.canteenDetails.remove('password');
 
+          event.canteenDetails['user_id'] = response.user?.id;
+          event.canteenDetails['image_url'] = await uploadFile(
+            'petstores/image',
+            event.canteenDetails['image'],
+            event.canteenDetails['image_name'],
+          );
+          event.canteenDetails.remove('image');
+          event.canteenDetails.remove('image_name');
+
           await table.insert(event.canteenDetails);
 
           emit(CanteensSuccessState());
         } else if (event is EditCanteenEvent) {
-          event.canteenDetails.remove('password');
           event.canteenDetails.remove('email');
+          event.canteenDetails.remove('password');
+          if (event.canteenDetails['image'] != null) {
+            event.canteenDetails['image_url'] = await uploadFile(
+              'petstores/image',
+              event.canteenDetails['image'],
+              event.canteenDetails['image_name'],
+            );
+            event.canteenDetails.remove('image');
+            event.canteenDetails.remove('image_name');
+          }
 
           await table.update(event.canteenDetails).eq('id', event.canteenId);
 
