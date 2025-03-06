@@ -119,6 +119,7 @@ import 'package:collage_connect_collage/theme/app_theme.dart';
 import 'package:collage_connect_collage/util/value_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
@@ -132,6 +133,24 @@ class _LoginScreenState extends State<Loginscreen> {
   final TextEditingController _emailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isObscure = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+        const Duration(
+          milliseconds: 100,
+        ), () {
+      User? currentUser = Supabase.instance.client.auth.currentUser;
+      if (currentUser != null && currentUser.appMetadata['role'] == 'admin') {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

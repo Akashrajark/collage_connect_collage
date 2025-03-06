@@ -7,7 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
       anonKey:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnaXhtaXhnamhzcHVxYXZxanN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI5NDMwMjgsImV4cCI6MjA0ODUxOTAyOH0.gb43EJ1vmms_HHfdvj9bZWmAQ2Fv_qMm_yoSsjHBE8s',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnaXhtaXhnamhzcHVxYXZxanN1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMjk0MzAyOCwiZXhwIjoyMDQ4NTE5MDI4fQ._oP-wclMUlcBxULkChVCXpKnwdHwUo0yVwhbgtj8RIs',
       url: 'https://sgixmixgjhspuqavqjsu.supabase.co');
 
   runApp(const MyApp());
