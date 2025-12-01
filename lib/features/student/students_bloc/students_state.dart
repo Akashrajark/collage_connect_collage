@@ -20,3 +20,9 @@ final class StudentsFailureState extends StudentsState {
 
   StudentsFailureState({this.message = apiErrorMessage});
 }
+
+final class CourseStudentGetSuccessState extends StudentsState {
+  final List<Map<String, dynamic>> students;
+
+  CourseStudentGetSuccessState({required this.students});
+}

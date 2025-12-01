@@ -30,3 +30,9 @@ class DeleteStudentEvent extends StudentsEvent {
 
   DeleteStudentEvent({required this.studentId});
 }
+
+class GetStudentByCourseId extends StudentsEvent {
+  final int courseId;
+
+  GetStudentByCourseId({required this.courseId});
+}

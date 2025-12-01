@@ -72,6 +72,15 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
         } else if (event is DeleteStudentEvent) {
           await table.delete().eq('id', event.studentId);
           emit(StudentsSuccessState());
+        } else if (event is GetStudentByCourseId) {
+          PostgrestFilterBuilder<List<Map<String, dynamic>>> query = table
+              .select('*')
+              .eq('collage_user_id', supabaseClient.auth.currentUser!.id)
+              .eq('course_id', event.courseId);
+
+          List<Map<String, dynamic>> students = await query.order('name', ascending: true);
+
+          emit(CourseStudentGetSuccessState(students: students));
         }
       } catch (e, s) {
         Logger().e('$e\n$s');
