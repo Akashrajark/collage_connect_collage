@@ -209,6 +209,9 @@ class _EventScreenState extends State<EventScreen> {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
                                   TextButton(
                                     child: const Text('View Details'),
                                     onPressed: () {

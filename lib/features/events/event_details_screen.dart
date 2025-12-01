@@ -203,7 +203,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                                 icon: Icons.access_time,
                                 label: 'Time',
                                 value:
-                                    '${formatValue(widget.eventDetails['start_time'])} - ${formatValue(widget.eventDetails['end_time'])}',
+                                    '${formatTimeAmPm(widget.eventDetails['start_time'])} - ${formatTimeAmPm(widget.eventDetails['end_time'])}',
                                 color: Colors.orange,
                               ),
                               _buildDetailCard(

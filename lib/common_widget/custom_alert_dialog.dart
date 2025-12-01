@@ -10,6 +10,7 @@ class CustomAlertDialog extends StatelessWidget {
   final double width;
   final List<Widget>? action;
   final bool isLoading;
+  final CrossAxisAlignment crossAxisAlignment;
   const CustomAlertDialog({
     super.key,
     required this.title,
@@ -22,6 +23,7 @@ class CustomAlertDialog extends StatelessWidget {
     this.width = 400,
     this.isLoading = false,
     this.action,
+    this.crossAxisAlignment = CrossAxisAlignment.end,
   });
 
   @override
@@ -39,7 +41,7 @@ class CustomAlertDialog extends StatelessWidget {
             vertical: 15,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: crossAxisAlignment,
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
@@ -47,11 +49,10 @@ class CustomAlertDialog extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(title,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                )),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                            )),
                   ),
                   if (action != null) ...action!,
                   InkWell(
@@ -115,24 +116,17 @@ class CustomAlertDialog extends StatelessWidget {
                       Expanded(
                         child: CustomButton(
                           label: secondaryButton,
-                          onPressed: isLoading
-                              ? null
-                              : onSecondaryPressed ??
-                                  () => Navigator.pop(context),
+                          onPressed: isLoading ? null : onSecondaryPressed ?? () => Navigator.pop(context),
                           color: Colors.grey,
                         ),
                       ),
-                    if (primaryButton != null && secondaryButton != null)
-                      const SizedBox(width: 10),
+                    if (primaryButton != null && secondaryButton != null) const SizedBox(width: 10),
                     if (primaryButton != null)
                       Expanded(
                         child: CustomButton(
                           label: primaryButton,
                           inverse: true,
-                          onPressed: isLoading
-                              ? null
-                              : onPrimaryPressed ??
-                                  () => Navigator.pop(context),
+                          onPressed: isLoading ? null : onPrimaryPressed ?? () => Navigator.pop(context),
                         ),
                       ),
                   ],

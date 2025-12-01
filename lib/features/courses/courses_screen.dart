@@ -1,51 +1,51 @@
+import 'package:collage_connect_collage/common_widget/custom_alert_dialog.dart';
 import 'package:collage_connect_collage/common_widget/custom_button.dart';
-import 'package:collage_connect_collage/common_widget/custom_search.dart';
-import 'package:collage_connect_collage/features/student/add_student.dart';
+import 'package:collage_connect_collage/features/courses/courses_detail_screen.dart';
 import 'package:collage_connect_collage/util/format_function.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/web.dart';
 
-import '../../common_widget/custom_alert_dialog.dart';
+import '../../common_widget/custom_search.dart';
 import '../../util/check_login.dart';
-import 'student_detail_dialog.dart';
-import 'students_bloc/students_bloc.dart';
+import 'add_course.dart';
+import 'courses_bloc/courses_bloc.dart';
 
-class StudentScreen extends StatefulWidget {
-  const StudentScreen({super.key});
+class CourseScreen extends StatefulWidget {
+  const CourseScreen({super.key});
 
   @override
-  State<StudentScreen> createState() => _StudentScreenState();
+  State<CourseScreen> createState() => _CourseScreenState();
 }
 
-class _StudentScreenState extends State<StudentScreen> {
-  final StudentsBloc _studentsBloc = StudentsBloc();
+class _CourseScreenState extends State<CourseScreen> {
+  final CoursesBloc _coursesBloc = CoursesBloc();
 
   Map<String, dynamic> params = {
     'query': null,
   };
 
-  List<Map> _students = [];
+  List<Map> _courses = [];
 
   @override
   void initState() {
     checkLogin(context);
-    getStudents();
+    getCourses();
     super.initState();
   }
 
-  void getStudents() {
-    _studentsBloc.add(GetAllStudentsEvent(params: params));
+  void getCourses() {
+    _coursesBloc.add(GetAllCoursesEvent(params: params));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _studentsBloc,
-      child: BlocConsumer<StudentsBloc, StudentsState>(
+      value: _coursesBloc,
+      child: BlocConsumer<CoursesBloc, CoursesState>(
         listener: (context, state) {
-          if (state is StudentsFailureState) {
+          if (state is CoursesFailureState) {
             showDialog(
               context: context,
               builder: (context) => CustomAlertDialog(
@@ -53,17 +53,17 @@ class _StudentScreenState extends State<StudentScreen> {
                 description: state.message,
                 primaryButton: 'Try Again',
                 onPrimaryPressed: () {
-                  getStudents();
+                  getCourses();
                   Navigator.pop(context);
                 },
               ),
             );
-          } else if (state is StudentsGetSuccessState) {
-            _students = state.students;
-            Logger().w(_students);
+          } else if (state is CoursesGetSuccessState) {
+            _courses = state.courses;
+            Logger().w(_courses);
             setState(() {});
-          } else if (state is StudentsSuccessState) {
-            getStudents();
+          } else if (state is CoursesSuccessState) {
+            getCourses();
           }
         },
         builder: (context, state) {
@@ -82,7 +82,7 @@ class _StudentScreenState extends State<StudentScreen> {
                     Row(
                       children: [
                         const Text(
-                          'Students',
+                          'Courses',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -94,12 +94,12 @@ class _StudentScreenState extends State<StudentScreen> {
                           child: CustomSearch(
                             onSearch: (p0) {
                               params['query'] = p0;
-                              getStudents();
+                              getCourses();
                             },
                           ),
                         ),
                         SizedBox(
-                          width: 20,
+                          width: 10,
                         ),
                         CustomButton(
                           inverse: true,
@@ -107,41 +107,39 @@ class _StudentScreenState extends State<StudentScreen> {
                             showDialog(
                               context: context,
                               builder: (context) => BlocProvider.value(
-                                value: _studentsBloc,
-                                child: AddStudent(),
+                                value: _coursesBloc,
+                                child: AddCourse(),
                               ),
                             );
                           },
-                          label: 'Add student',
+                          label: 'Add Course',
                           iconData: Icons.add,
                         )
                       ],
                     ),
                     const SizedBox(height: 16),
-                    if (state is StudentsLoadingState)
+                    if (state is CoursesLoadingState)
                       const Center(child: CircularProgressIndicator())
-                    else if (state is StudentsGetSuccessState && _students.isEmpty)
-                      const Center(child: Text('No students found'))
-                    else if (state is StudentsGetSuccessState && _students.isNotEmpty)
+                    else if (state is CoursesGetSuccessState && _courses.isEmpty)
+                      const Center(child: Text('No course found'))
+                    else if (state is CoursesGetSuccessState && _courses.isNotEmpty)
                       Expanded(
                         child: DataTable2(
                           columnSpacing: 12,
                           horizontalMargin: 12,
                           minWidth: 600,
                           columns: const [
-                            DataColumn2(label: Text('User Id'), size: ColumnSize.L),
-                            DataColumn(label: Text('Student name')),
-                            DataColumn(label: Text('Reg. No.')),
+                            DataColumn2(label: Text('Course Name'), size: ColumnSize.L),
+                            DataColumn(label: Text('Description')),
                             DataColumn(label: Text('Details'), numeric: true),
                           ],
                           rows: List.generate(
-                            _students.length,
+                            _courses.length,
                             (index) => DataRow(cells: [
                               DataCell(Text(
-                                formatValue(_students[index]['id']),
+                                formatValue(_courses[index]['name']),
                               )),
-                              DataCell(Text(formatValue(_students[index]['name']))),
-                              DataCell(Text(formatValue(_students[index]['reg_no']))),
+                              DataCell(Text(formatValue(_courses[index]['description']))),
                               DataCell(Row(
                                 children: [
                                   ElevatedButton(
@@ -149,9 +147,9 @@ class _StudentScreenState extends State<StudentScreen> {
                                       showDialog(
                                         context: context,
                                         builder: (context) => BlocProvider.value(
-                                          value: _studentsBloc,
-                                          child: AddStudent(
-                                            studentDetails: _students[index],
+                                          value: _coursesBloc,
+                                          child: AddCourse(
+                                            courseDetails: _courses[index],
                                           ),
                                         ),
                                       );
@@ -175,17 +173,17 @@ class _StudentScreenState extends State<StudentScreen> {
                                       showDialog(
                                         context: context,
                                         builder: (context) => BlocProvider.value(
-                                          value: _studentsBloc,
+                                          value: _coursesBloc,
                                           child: CustomAlertDialog(
-                                            title: 'Delete Student',
-                                            description: 'Are you sure you want to delete this student?',
+                                            title: 'Delete Course',
+                                            description: 'Are you sure you want to delete this course?',
                                             secondaryButton: 'Cancel',
                                             onSecondaryPressed: () {
                                               Navigator.pop(context);
                                             },
                                             primaryButton: 'Delete',
                                             onPrimaryPressed: () {
-                                              _studentsBloc.add(DeleteStudentEvent(studentId: _students[index]['id']));
+                                              _coursesBloc.add(DeleteCourseEvent(courseId: _courses[index]['id']));
                                               Navigator.pop(context);
                                             },
                                           ),
@@ -209,11 +207,11 @@ class _StudentScreenState extends State<StudentScreen> {
                                   TextButton(
                                     child: const Text('View Details'),
                                     onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return StudentDetailDialog(student: _students[index]);
-                                          });
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => CoursesDetailScreen(courseDetails: _courses[index]),
+                                        ),
+                                      );
                                     },
                                   ),
                                 ],

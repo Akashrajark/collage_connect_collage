@@ -203,6 +203,9 @@ class _CanteenScreenState extends State<CanteenScreen> {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
                                   TextButton(
                                     child: const Text('View Details'),
                                     onPressed: () {

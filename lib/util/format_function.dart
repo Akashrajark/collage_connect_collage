@@ -7,6 +7,27 @@ String formatValue(dynamic value) {
   return value.toString();
 }
 
+// Format TimeOfDay to AM/PM format
+String formatTimeAmPm(String? timeString) {
+  if (timeString == null || timeString.isEmpty) return '';
+
+  // Split the string to get the time part
+  final parts = timeString.split(' ');
+  if (parts.isEmpty) return '';
+
+  final timePart = parts[0];
+  final timeComponents = timePart.split(':');
+
+  if (timeComponents.length != 3) return ''; // Adjusted for timetz format
+
+  final hour = int.tryParse(timeComponents[0]) ?? 0;
+  final minute = int.tryParse(timeComponents[1]) ?? 0;
+  final period = hour >= 12 ? 'PM' : 'AM';
+  final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+
+  return '${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $period';
+}
+
 List? formatDatesInList(List? data) {
   // Check if the list is null, return an empty list if so
   if (data == null) return [];

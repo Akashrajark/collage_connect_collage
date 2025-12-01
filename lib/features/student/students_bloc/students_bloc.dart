@@ -20,7 +20,7 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
 
         if (event is GetAllStudentsEvent) {
           PostgrestFilterBuilder<List<Map<String, dynamic>>> query =
-              table.select('*').eq('user_id', supabaseClient.auth.currentUser!.id);
+              table.select('*,courses(name)').eq('collage_user_id', supabaseClient.auth.currentUser!.id);
 
           if (event.params['query'] != null) {
             query = query.ilike('name', '%${event.params['query']}%');
@@ -39,6 +39,7 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
             ),
           );
           event.studentDetails['user_id'] = response.user!.id;
+          event.studentDetails['collage_user_id'] = supabaseClient.auth.currentUser?.id;
           event.studentDetails.remove('password');
 
           event.studentDetails['image_url'] = await uploadFile(

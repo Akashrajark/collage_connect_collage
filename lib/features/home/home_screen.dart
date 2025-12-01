@@ -1,6 +1,7 @@
 import 'package:collage_connect_collage/common_widget/change_password.dart';
 import 'package:collage_connect_collage/common_widget/custom_alert_dialog.dart';
 import 'package:collage_connect_collage/features/canteen/canteen_screen.dart';
+import 'package:collage_connect_collage/features/courses/courses_screen.dart';
 import 'package:collage_connect_collage/features/dashboard/dashboard_screen.dart';
 import 'package:collage_connect_collage/features/events/event_screen.dart';
 import 'package:collage_connect_collage/features/login/login_screen.dart';
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         );
       }
     });
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -112,9 +113,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     height: 20,
                   ),
                   DrawerItem(
+                    isActive: _tabController.index == 4,
+                    iconData: Icons.event,
+                    label: 'Courses',
+                    onTap: () {
+                      _tabController.animateTo(4);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DrawerItem(
                     iconData: Icons.lock_outline_rounded,
                     label: "Change Password",
-                    isActive: _tabController.index == 4,
+                    isActive: _tabController.index == 5,
                     onTap: () {
                       showDialog(
                         context: context,
@@ -128,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   DrawerItem(
                       iconData: Icons.logout_rounded,
                       label: "Log Out",
-                      isActive: _tabController.index == 5,
+                      isActive: _tabController.index == 6,
                       onTap: () {
                         showDialog(
                           context: context,
@@ -164,6 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 EventScreen(
                   eventType: 'event',
                 ),
+                CourseScreen(),
               ],
             ),
           ),

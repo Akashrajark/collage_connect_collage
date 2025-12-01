@@ -51,7 +51,7 @@ class _AddCanteenState extends State<AddCanteen> {
       },
       builder: (context, state) {
         return CustomAlertDialog(
-          title: 'Add Student',
+          title: widget.canteenDetails == null ? 'Add Canteen' : 'Edit Canteen',
           isLoading: state is CanteensLoadingState,
           content: Form(
             key: _formKey,

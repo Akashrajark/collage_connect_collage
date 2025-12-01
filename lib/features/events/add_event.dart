@@ -108,7 +108,7 @@ class _AddEventState extends State<AddEvent> {
       },
       builder: (context, state) {
         return CustomAlertDialog(
-          title: 'Add Event',
+          title: widget.eventDetails == null ? 'Add Event' : 'Edit Event',
           isLoading: state is EventsLoadingState,
           content: Flexible(
             child: Form(
