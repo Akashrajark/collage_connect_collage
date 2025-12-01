@@ -142,7 +142,7 @@ class _LoginScreenState extends State<Loginscreen> {
           milliseconds: 100,
         ), () {
       User? currentUser = Supabase.instance.client.auth.currentUser;
-      if (currentUser != null && currentUser.appMetadata['role'] == 'admin') {
+      if (currentUser != null && currentUser.appMetadata['role'] == 'collage') {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => const HomeScreen(),
@@ -194,8 +194,7 @@ class _LoginScreenState extends State<Loginscreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                         child: Form(
                           key: _formKey,
                           child: Column(
@@ -207,10 +206,7 @@ class _LoginScreenState extends State<Loginscreen> {
                               ),
                               Text(
                                 'Log in - Collage',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineLarge!
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                                       color: Colors.white.withAlpha(220),
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -221,10 +217,7 @@ class _LoginScreenState extends State<Loginscreen> {
                               ),
                               Text(
                                 'Email',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                       color: Colors.white70,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -243,10 +236,7 @@ class _LoginScreenState extends State<Loginscreen> {
                               ),
                               Text(
                                 'Password',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                       color: Colors.white70,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -265,9 +255,7 @@ class _LoginScreenState extends State<Loginscreen> {
                                           isObscure = !isObscure;
                                           setState(() {});
                                         },
-                                        icon: Icon(isObscure
-                                            ? Icons.visibility_off
-                                            : Icons.visibility)),
+                                        icon: Icon(isObscure ? Icons.visibility_off : Icons.visibility)),
                                     border: const OutlineInputBorder(),
                                     labelText: 'Password',
                                     prefixIcon: const Icon(Icons.lock),
@@ -277,13 +265,13 @@ class _LoginScreenState extends State<Loginscreen> {
                               ),
                               CustomButton(
                                 inverse: true,
+                                isLoading: state is LoginLoadingState,
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
                                     BlocProvider.of<LoginBloc>(context).add(
                                       LoginEvent(
                                         email: _emailController.text.trim(),
-                                        password:
-                                            _passwordController.text.trim(),
+                                        password: _passwordController.text.trim(),
                                       ),
                                     );
                                   }

@@ -2,7 +2,7 @@ import 'package:collage_connect_collage/common_widget/change_password.dart';
 import 'package:collage_connect_collage/common_widget/custom_alert_dialog.dart';
 import 'package:collage_connect_collage/features/canteen/canteen_screen.dart';
 import 'package:collage_connect_collage/features/dashboard/dashboard_screen.dart';
-import 'package:collage_connect_collage/features/event/event_screen.dart';
+import 'package:collage_connect_collage/features/events/event_screen.dart';
 import 'package:collage_connect_collage/features/login/login_screen.dart';
 import 'package:collage_connect_collage/features/student/student_screen.dart';
 import 'package:collage_connect_collage/theme/app_theme.dart';
@@ -16,12 +16,22 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
+    Future.delayed(const Duration(milliseconds: 200), () {
+      final GoTrueClient auth = Supabase.instance.client.auth;
+      if (auth.currentUser == null || auth.currentUser!.appMetadata['role'] != 'collage') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Loginscreen(),
+          ),
+        );
+      }
+    });
     _tabController = TabController(length: 6, vsync: this);
     _tabController.addListener(() {
       setState(() {});
@@ -39,108 +49,109 @@ class _HomeScreenState extends State<HomeScreen>
               width: 230,
               color: Colors.white,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Column(
                     children: [
-                      const SizedBox(
-                        height: 30,
+                      Text(
+                        'College connect',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
                       ),
-                      const Column(
-                        children: [
-                          Text(
-                            'College connect',
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                      Text(
+                        'College',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: Colors.black),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 90),
+                  DrawerItem(
+                    isActive: _tabController.index == 0,
+                    iconData: Icons.dashboard_rounded,
+                    label: 'Dashboard',
+                    onTap: () {
+                      _tabController.animateTo(0);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DrawerItem(
+                    isActive: _tabController.index == 1,
+                    iconData: Icons.school,
+                    label: 'Student',
+                    onTap: () {
+                      _tabController.animateTo(1);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DrawerItem(
+                    isActive: _tabController.index == 2,
+                    iconData: Icons.storefront_outlined,
+                    label: 'Canteen',
+                    onTap: () {
+                      _tabController.animateTo(2);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DrawerItem(
+                    isActive: _tabController.index == 3,
+                    iconData: Icons.event,
+                    label: 'Events',
+                    onTap: () {
+                      _tabController.animateTo(3);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DrawerItem(
+                    iconData: Icons.lock_outline_rounded,
+                    label: "Change Password",
+                    isActive: _tabController.index == 4,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const ChangePasswordDialog(),
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DrawerItem(
+                      iconData: Icons.logout_rounded,
+                      label: "Log Out",
+                      isActive: _tabController.index == 5,
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => CustomAlertDialog(
+                            title: "LOG OUT",
+                            content: const Text(
+                              "Are you sure you want to log out? Clicking 'Logout' will end your current session and require you to sign in again to access your account.",
+                            ),
+                            width: 400,
+                            primaryButton: "LOG OUT",
+                            onPrimaryPressed: () {
+                              Supabase.instance.client.auth.signOut();
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Loginscreen(),
+                                  ),
+                                  (route) => false);
+                            },
                           ),
-                          Text(
-                            'College',
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 90),
-                      DrawerItem(
-                        isActive: _tabController.index == 0,
-                        iconData: Icons.dashboard_rounded,
-                        label: 'Dashboard',
-                        onTap: () {
-                          _tabController.animateTo(0);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      DrawerItem(
-                        isActive: _tabController.index == 1,
-                        iconData: Icons.school,
-                        label: 'Student',
-                        onTap: () {
-                          _tabController.animateTo(1);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      DrawerItem(
-                        isActive: _tabController.index == 2,
-                        iconData: Icons.storefront_outlined,
-                        label: 'Canteen',
-                        onTap: () {
-                          _tabController.animateTo(2);
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      DrawerItem(
-                        iconData: Icons.lock_outline_rounded,
-                        label: "Change Password",
-                        isActive: _tabController.index == 3,
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => const ChangePasswordDialog(),
-                          );
-                        },
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      DrawerItem(
-                          iconData: Icons.logout_rounded,
-                          label: "Log Out",
-                          isActive: _tabController.index == 4,
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => CustomAlertDialog(
-                                title: "LOG OUT",
-                                content: const Text(
-                                  "Are you sure you want to log out? Clicking 'Logout' will end your current session and require you to sign in again to access your account.",
-                                ),
-                                width: 400,
-                                primaryButton: "LOG OUT",
-                                onPrimaryPressed: () {
-                                  Supabase.instance.client.auth.signOut();
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const Loginscreen(),
-                                      ),
-                                      (route) => false);
-                                },
-                              ),
-                            );
-                          }),
-                    ]),
+                        );
+                      }),
+                ]),
               )),
           Expanded(
             child: TabBarView(
@@ -150,7 +161,9 @@ class _HomeScreenState extends State<HomeScreen>
                 DashboardScreen(),
                 StudentScreen(),
                 CanteenScreen(),
-                EventScreen()
+                EventScreen(
+                  eventType: 'event',
+                ),
               ],
             ),
           ),

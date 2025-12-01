@@ -6,7 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'categories_bloc/students_bloc.dart';
+import 'students_bloc/students_bloc.dart';
 
 class AddStudent extends StatefulWidget {
   final Map? studentDetails;
@@ -165,8 +165,7 @@ class _AddStudentState extends State<AddStudent> {
           ),
           primaryButton: 'save',
           onPrimaryPressed: () {
-            if (_formKey.currentState!.validate() &&
-                ((coverImage != null) || widget.studentDetails != null)) {
+            if (_formKey.currentState!.validate() && ((coverImage != null) || widget.studentDetails != null)) {
               Map<String, dynamic> details = {
                 'name': _nameController.text.trim(),
                 'email': _emailController.text.trim(),

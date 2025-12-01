@@ -16,18 +16,17 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
         emit(StudentsLoadingState());
         SupabaseClient supabaseClient = Supabase.instance.client;
 
-        SupabaseQueryBuilder table = Supabase.instance.client.from('customers');
+        SupabaseQueryBuilder table = Supabase.instance.client.from('students');
 
         if (event is GetAllStudentsEvent) {
           PostgrestFilterBuilder<List<Map<String, dynamic>>> query =
-              table.select('*');
+              table.select('*').eq('user_id', supabaseClient.auth.currentUser!.id);
 
           if (event.params['query'] != null) {
             query = query.ilike('name', '%${event.params['query']}%');
           }
 
-          List<Map<String, dynamic>> students =
-              await query.order('name', ascending: true);
+          List<Map<String, dynamic>> students = await query.order('name', ascending: true);
 
           emit(StudentsGetSuccessState(students: students));
         } else if (event is AddStudentEvent) {

@@ -12,19 +12,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginEvent>((event, emit) async {
       try {
         emit(LoginLoadingState());
-        AuthResponse authResponse =
-            await Supabase.instance.client.auth.signInWithPassword(
+        AuthResponse authResponse = await Supabase.instance.client.auth.signInWithPassword(
           password: event.password,
           email: event.email,
         );
-        if (authResponse.user!.appMetadata['role'] == 'admin') {
+        if (authResponse.user!.appMetadata['role'] == 'collage') {
           emit(LoginSuccessState());
         } else {
           await Supabase.instance.client.auth.signOut();
           emit(
             LoginFailureState(
-              message:
-                  'Invalid credentials, please check your username and password and try again',
+              message: 'Invalid credentials, please check your username and password and try again',
             ),
           );
         }

@@ -1,7 +1,5 @@
 import 'package:collage_connect_collage/common_widget/custom_alert_dialog.dart';
 import 'package:collage_connect_collage/common_widget/custom_button.dart';
-import 'package:collage_connect_collage/common_widget/custom_label_with_text.dart';
-import 'package:collage_connect_collage/features/canteen/add_canteen.dart';
 import 'package:collage_connect_collage/util/format_function.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
@@ -10,42 +8,45 @@ import 'package:logger/web.dart';
 
 import '../../common_widget/custom_search.dart';
 import '../../util/check_login.dart';
-import 'canteens_bloc/canteens_bloc.dart';
+import 'add_event.dart';
+import 'event_details_screen.dart';
+import 'events_bloc/events_bloc.dart';
 
-class CanteenScreen extends StatefulWidget {
-  const CanteenScreen({super.key});
+class EventScreen extends StatefulWidget {
+  final String eventType;
+  const EventScreen({super.key, required this.eventType});
 
   @override
-  State<CanteenScreen> createState() => _CanteenScreenState();
+  State<EventScreen> createState() => _EventScreenState();
 }
 
-class _CanteenScreenState extends State<CanteenScreen> {
-  final CanteensBloc _canteensBloc = CanteensBloc();
+class _EventScreenState extends State<EventScreen> {
+  final EventsBloc _eventsBloc = EventsBloc();
 
   Map<String, dynamic> params = {
     'query': null,
   };
 
-  List<Map> _canteens = [];
+  List<Map> _events = [];
 
   @override
   void initState() {
     checkLogin(context);
-    getCanteens();
+    getEvents();
     super.initState();
   }
 
-  void getCanteens() {
-    _canteensBloc.add(GetAllCanteensEvent(params: params));
+  void getEvents() {
+    _eventsBloc.add(GetAllEventsEvent(params: params));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _canteensBloc,
-      child: BlocConsumer<CanteensBloc, CanteensState>(
+      value: _eventsBloc,
+      child: BlocConsumer<EventsBloc, EventsState>(
         listener: (context, state) {
-          if (state is CanteensFailureState) {
+          if (state is EventsFailureState) {
             showDialog(
               context: context,
               builder: (context) => CustomAlertDialog(
@@ -53,17 +54,17 @@ class _CanteenScreenState extends State<CanteenScreen> {
                 description: state.message,
                 primaryButton: 'Try Again',
                 onPrimaryPressed: () {
-                  getCanteens();
+                  getEvents();
                   Navigator.pop(context);
                 },
               ),
             );
-          } else if (state is CanteensGetSuccessState) {
-            _canteens = state.canteens;
-            Logger().w(_canteens);
+          } else if (state is EventsGetSuccessState) {
+            _events = state.events;
+            Logger().w(_events);
             setState(() {});
-          } else if (state is CanteensSuccessState) {
-            getCanteens();
+          } else if (state is EventsSuccessState) {
+            getEvents();
           }
         },
         builder: (context, state) {
@@ -82,7 +83,7 @@ class _CanteenScreenState extends State<CanteenScreen> {
                     Row(
                       children: [
                         const Text(
-                          'Canteens',
+                          'Events',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -94,7 +95,7 @@ class _CanteenScreenState extends State<CanteenScreen> {
                           child: CustomSearch(
                             onSearch: (p0) {
                               params['query'] = p0;
-                              getCanteens();
+                              getEvents();
                             },
                           ),
                         ),
@@ -107,41 +108,45 @@ class _CanteenScreenState extends State<CanteenScreen> {
                             showDialog(
                               context: context,
                               builder: (context) => BlocProvider.value(
-                                value: _canteensBloc,
-                                child: AddCanteen(),
+                                value: _eventsBloc,
+                                child: AddEvent(
+                                  eventType: widget.eventType,
+                                ),
                               ),
                             );
                           },
-                          label: 'Add Canteen',
+                          label: 'Add Event',
                           iconData: Icons.add,
                         )
                       ],
                     ),
                     const SizedBox(height: 16),
-                    if (state is CanteensLoadingState)
+                    if (state is EventsLoadingState)
                       const Center(child: CircularProgressIndicator())
-                    else if (state is CanteensGetSuccessState && _canteens.isEmpty)
-                      const Center(child: Text('No canteen found'))
-                    else if (state is CanteensGetSuccessState && _canteens.isNotEmpty)
+                    else if (state is EventsGetSuccessState && _events.isEmpty)
+                      const Center(child: Text('No event found'))
+                    else if (state is EventsGetSuccessState && _events.isNotEmpty)
                       Expanded(
                         child: DataTable2(
                           columnSpacing: 12,
                           horizontalMargin: 12,
-                          minWidth: 600,
+                          minWidth: 1400,
                           columns: const [
-                            DataColumn2(label: Text('Canteen Name'), size: ColumnSize.L),
-                            DataColumn(label: Text('Phone')),
-                            DataColumn(label: Text('email')),
-                            DataColumn(label: Text('Details'), numeric: true),
+                            DataColumn2(label: Text('Event Title'), size: ColumnSize.L),
+                            DataColumn2(label: Text('Date')),
+                            DataColumn2(label: Text('Venue')),
+                            DataColumn2(label: Text('Organizer')),
+                            DataColumn2(label: Text('Actions'), size: ColumnSize.L),
                           ],
                           rows: List.generate(
-                            _canteens.length,
+                            _events.length,
                             (index) => DataRow(cells: [
                               DataCell(Text(
-                                formatValue(_canteens[index]['name']),
+                                formatValue(_events[index]['title']),
                               )),
-                              DataCell(Text(formatValue(_canteens[index]['phone']))),
-                              DataCell(Text(formatValue(_canteens[index]['email']))),
+                              DataCell(Text(formatDate(_events[index]['event_date']))),
+                              DataCell(Text(formatValue(_events[index]['venu']))),
+                              DataCell(Text(formatValue(_events[index]['organizer_name']))),
                               DataCell(Row(
                                 children: [
                                   ElevatedButton(
@@ -149,9 +154,10 @@ class _CanteenScreenState extends State<CanteenScreen> {
                                       showDialog(
                                         context: context,
                                         builder: (context) => BlocProvider.value(
-                                          value: _canteensBloc,
-                                          child: AddCanteen(
-                                            canteenDetails: _canteens[index],
+                                          value: _eventsBloc,
+                                          child: AddEvent(
+                                            eventDetails: _events[index],
+                                            eventType: widget.eventType,
                                           ),
                                         ),
                                       );
@@ -175,17 +181,17 @@ class _CanteenScreenState extends State<CanteenScreen> {
                                       showDialog(
                                         context: context,
                                         builder: (context) => BlocProvider.value(
-                                          value: _canteensBloc,
+                                          value: _eventsBloc,
                                           child: CustomAlertDialog(
-                                            title: 'Delete Canteen',
-                                            description: 'Are you sure you want to delete this canteen?',
+                                            title: 'Delete Event',
+                                            description: 'Are you sure you want to delete this event?',
                                             secondaryButton: 'Cancel',
                                             onSecondaryPressed: () {
                                               Navigator.pop(context);
                                             },
                                             primaryButton: 'Delete',
                                             onPrimaryPressed: () {
-                                              _canteensBloc.add(DeleteCanteenEvent(canteenId: _canteens[index]['id']));
+                                              _eventsBloc.add(DeleteEventEvent(eventId: _events[index]['id']));
                                               Navigator.pop(context);
                                             },
                                           ),
@@ -206,33 +212,12 @@ class _CanteenScreenState extends State<CanteenScreen> {
                                   TextButton(
                                     child: const Text('View Details'),
                                     onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => CustomAlertDialog(
-                                          title: 'Canteen Details',
-                                          content: Column(
-                                            children: [
-                                              ListTile(
-                                                leading: Image.network(
-                                                  _canteens[index]['image_url'],
-                                                  height: 200,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                title: Text('Name: ${_canteens[index]['name']}'),
-                                                subtitle: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text('Email: ${_canteens[index]['email']}'),
-                                                    Text('Reg. No.: ${_canteens[index]['phone']}'),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EventDetailsScreen(
+                                            eventDetails: _events[index],
                                           ),
-                                          primaryButton: 'Close',
-                                          onPrimaryPressed: () {
-                                            Navigator.pop(context);
-                                          },
                                         ),
                                       );
                                     },
@@ -249,42 +234,6 @@ class _CanteenScreenState extends State<CanteenScreen> {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class CanteenDetails extends StatelessWidget {
-  const CanteenDetails({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomAlertDialog(
-      title: 'Canteen Details',
-      content: Align(
-        alignment: Alignment.topLeft,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextWithLabel(
-              label: 'Canteen Name',
-              text: 'malkfaf',
-              alignment: CrossAxisAlignment.start,
-            ),
-            TextWithLabel(
-              label: 'Phone',
-              text: '6514498218',
-              alignment: CrossAxisAlignment.start,
-            ),
-            TextWithLabel(
-              label: 'Email',
-              text: 'malkfaf@gmail.com',
-              alignment: CrossAxisAlignment.start,
-            )
-          ],
-        ),
       ),
     );
   }

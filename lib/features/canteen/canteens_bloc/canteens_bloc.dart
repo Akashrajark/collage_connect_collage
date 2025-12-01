@@ -16,18 +16,17 @@ class CanteensBloc extends Bloc<CanteensEvent, CanteensState> {
         emit(CanteensLoadingState());
         SupabaseClient supabaseClient = Supabase.instance.client;
 
-        SupabaseQueryBuilder table = Supabase.instance.client.from('shops');
+        SupabaseQueryBuilder table = Supabase.instance.client.from('canteens');
 
         if (event is GetAllCanteensEvent) {
           PostgrestFilterBuilder<List<Map<String, dynamic>>> query =
-              table.select('*');
+              table.select('*').eq('user_id', supabaseClient.auth.currentUser!.id);
 
           if (event.params['query'] != null) {
             query = query.ilike('name', '%${event.params['query']}%');
           }
 
-          List<Map<String, dynamic>> canteens =
-              await query.order('name', ascending: true);
+          List<Map<String, dynamic>> canteens = await query.order('name', ascending: true);
 
           emit(CanteensGetSuccessState(canteens: canteens));
         } else if (event is AddCanteenEvent) {

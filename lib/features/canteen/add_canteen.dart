@@ -1,6 +1,6 @@
 import 'package:collage_connect_collage/common_widget/custom_alert_dialog.dart';
 import 'package:collage_connect_collage/common_widget/custom_text_formfield.dart';
-import 'package:collage_connect_collage/features/canteen/categories_bloc/canteens_bloc.dart';
+import 'package:collage_connect_collage/features/canteen/canteens_bloc/canteens_bloc.dart';
 import 'package:collage_connect_collage/util/value_validator.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -162,8 +162,7 @@ class _AddCanteenState extends State<AddCanteen> {
           ),
           primaryButton: 'save',
           onPrimaryPressed: () {
-            if (_formKey.currentState!.validate() &&
-                ((coverImage != null) || widget.canteenDetails != null)) {
+            if (_formKey.currentState!.validate() && ((coverImage != null) || widget.canteenDetails != null)) {
               Map<String, dynamic> details = {
                 'name': _nameController.text.trim(),
                 'email': _emailController.text.trim(),
