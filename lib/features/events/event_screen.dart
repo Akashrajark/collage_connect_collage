@@ -14,7 +14,9 @@ import 'events_bloc/events_bloc.dart';
 
 class EventScreen extends StatefulWidget {
   final String eventType;
-  const EventScreen({super.key, required this.eventType});
+  final String title;
+
+  const EventScreen({super.key, required this.eventType, required this.title});
 
   @override
   State<EventScreen> createState() => _EventScreenState();
@@ -31,6 +33,7 @@ class _EventScreenState extends State<EventScreen> {
 
   @override
   void initState() {
+    params['type'] = widget.eventType;
     checkLogin(context);
     getEvents();
     super.initState();
@@ -82,8 +85,8 @@ class _EventScreenState extends State<EventScreen> {
                   children: [
                     Row(
                       children: [
-                        const Text(
-                          'Events',
+                        Text(
+                          widget.title,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -110,12 +113,13 @@ class _EventScreenState extends State<EventScreen> {
                               builder: (context) => BlocProvider.value(
                                 value: _eventsBloc,
                                 child: AddEvent(
+                                  title: widget.title,
                                   eventType: widget.eventType,
                                 ),
                               ),
                             );
                           },
-                          label: 'Add Event',
+                          label: 'Add ${widget.title}',
                           iconData: Icons.add,
                         )
                       ],
@@ -124,7 +128,7 @@ class _EventScreenState extends State<EventScreen> {
                     if (state is EventsLoadingState)
                       const Center(child: CircularProgressIndicator())
                     else if (state is EventsGetSuccessState && _events.isEmpty)
-                      const Center(child: Text('No event found'))
+                      Center(child: Text('No ${widget.title.toLowerCase()} found'))
                     else if (state is EventsGetSuccessState && _events.isNotEmpty)
                       Expanded(
                         child: DataTable2(
@@ -132,7 +136,7 @@ class _EventScreenState extends State<EventScreen> {
                           horizontalMargin: 12,
                           minWidth: 1400,
                           columns: const [
-                            DataColumn2(label: Text('Event Title'), size: ColumnSize.L),
+                            DataColumn2(label: Text('Title'), size: ColumnSize.L),
                             DataColumn2(label: Text('Date')),
                             DataColumn2(label: Text('Venue')),
                             DataColumn2(label: Text('Organizer')),
@@ -158,6 +162,7 @@ class _EventScreenState extends State<EventScreen> {
                                           child: AddEvent(
                                             eventDetails: _events[index],
                                             eventType: widget.eventType,
+                                            title: widget.title,
                                           ),
                                         ),
                                       );
@@ -183,8 +188,9 @@ class _EventScreenState extends State<EventScreen> {
                                         builder: (context) => BlocProvider.value(
                                           value: _eventsBloc,
                                           child: CustomAlertDialog(
-                                            title: 'Delete Event',
-                                            description: 'Are you sure you want to delete this event?',
+                                            title: 'Delete ${widget.title}',
+                                            description:
+                                                'Are you sure you want to delete this ${widget.title.toLowerCase()}?',
                                             secondaryButton: 'Cancel',
                                             onSecondaryPressed: () {
                                               Navigator.pop(context);
@@ -219,6 +225,7 @@ class _EventScreenState extends State<EventScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => EventDetailsScreen(
+                                            title: widget.title,
                                             eventDetails: _events[index],
                                           ),
                                         ),

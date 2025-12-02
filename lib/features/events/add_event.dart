@@ -14,10 +14,12 @@ import 'events_bloc/events_bloc.dart';
 class AddEvent extends StatefulWidget {
   final Map? eventDetails;
   final String eventType;
+  final String title;
   const AddEvent({
     super.key,
     this.eventDetails,
     required this.eventType,
+    required this.title,
   });
 
   @override
@@ -108,7 +110,7 @@ class _AddEventState extends State<AddEvent> {
       },
       builder: (context, state) {
         return CustomAlertDialog(
-          title: widget.eventDetails == null ? 'Add Event' : 'Edit Event',
+          title: widget.eventDetails == null ? 'Add ${widget.title}' : 'Edit ${widget.title}',
           isLoading: state is EventsLoadingState,
           content: Flexible(
             child: Form(
@@ -126,11 +128,10 @@ class _AddEventState extends State<AddEvent> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  const Text('Event Title',
-                      style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: 16.0)),
+                  Text('Title', style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: 16.0)),
                   const SizedBox(height: 8),
                   CustomTextFormField(
-                      labelText: 'Enter event title',
+                      labelText: 'Enter title',
                       controller: _titleController,
                       validator: notEmptyValidator,
                       isLoading: false),
@@ -139,16 +140,16 @@ class _AddEventState extends State<AddEvent> {
                       style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: 16.0)),
                   const SizedBox(height: 8),
                   CustomTextFormField(
-                      labelText: 'Enter event description',
+                      labelText: 'Enter description',
                       controller: _descriptionController,
                       validator: notEmptyValidator,
                       isLoading: false),
                   const SizedBox(height: 10),
-                  const Text('Event Date',
+                  const Text('Date',
                       style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black, fontSize: 16.0)),
                   const SizedBox(height: 8),
                   CustomDatePicker(
-                    label: 'Select event date',
+                    label: 'Select date',
                     isRequired: true,
                     selectedDate: _selectedEventDate,
                     onPick: (dt) {

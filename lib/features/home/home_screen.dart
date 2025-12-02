@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         );
       }
     });
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 8, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                child: ListView(shrinkWrap: true, children: [
                   const SizedBox(
                     height: 30,
                   ),
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       ),
                     ],
                   ),
-                  const SizedBox(height: 90),
+                  const SizedBox(height: 40),
                   DrawerItem(
                     isActive: _tabController.index == 0,
                     iconData: Icons.dashboard_rounded,
@@ -115,8 +115,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   ),
                   DrawerItem(
                     isActive: _tabController.index == 4,
-                    iconData: Icons.event,
-                    label: 'Courses',
+                    iconData: Icons.event_note,
+                    label: 'Seminars',
                     onTap: () {
                       _tabController.animateTo(4);
                     },
@@ -126,8 +126,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   ),
                   DrawerItem(
                     isActive: _tabController.index == 5,
-                    iconData: Icons.event,
-                    label: 'Exams',
+                    iconData: Icons.shop,
+                    label: 'Workshops',
                     onTap: () {
                       _tabController.animateTo(5);
                     },
@@ -136,9 +136,31 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     height: 20,
                   ),
                   DrawerItem(
+                    isActive: _tabController.index == 6,
+                    iconData: Icons.book,
+                    label: 'Courses',
+                    onTap: () {
+                      _tabController.animateTo(6);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DrawerItem(
+                    isActive: _tabController.index == 7,
+                    iconData: Icons.assignment,
+                    label: 'Exams',
+                    onTap: () {
+                      _tabController.animateTo(7);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DrawerItem(
                     iconData: Icons.lock_outline_rounded,
                     label: "Change Password",
-                    isActive: _tabController.index == 6,
+                    isActive: _tabController.index == 8,
                     onTap: () {
                       showDialog(
                         context: context,
@@ -152,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   DrawerItem(
                       iconData: Icons.logout_rounded,
                       label: "Log Out",
-                      isActive: _tabController.index == 7,
+                      isActive: _tabController.index == 9,
                       onTap: () {
                         showDialog(
                           context: context,
@@ -175,6 +197,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           ),
                         );
                       }),
+                  SizedBox(
+                    height: 50,
+                  ),
                 ]),
               )),
           Expanded(
@@ -187,6 +212,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 CanteenScreen(),
                 EventScreen(
                   eventType: 'event',
+                  title: 'Events',
+                ),
+                EventScreen(
+                  eventType: 'seminar',
+                  title: 'Seminars',
+                ),
+                EventScreen(
+                  eventType: 'workshop',
+                  title: 'Workshops',
                 ),
                 CourseScreen(),
                 ExamScreen(),

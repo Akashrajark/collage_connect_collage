@@ -28,6 +28,8 @@ class _AddCanteenState extends State<AddCanteen> {
 
   final _phoneController = TextEditingController();
 
+  final _descriptionController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   PlatformFile? coverImage;
 
@@ -37,6 +39,7 @@ class _AddCanteenState extends State<AddCanteen> {
       _nameController.text = widget.canteenDetails!['name'];
       _emailController.text = widget.canteenDetails!['email'];
       _phoneController.text = widget.canteenDetails!['phone'];
+      _descriptionController.text = widget.canteenDetails!['description'] ?? '';
     }
     super.initState();
   }
@@ -155,6 +158,29 @@ class _AddCanteenState extends State<AddCanteen> {
                   isLoading: false,
                 ),
                 const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Description',
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black,
+                    fontSize: 16.0,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                CustomTextFormField(
+                  labelText: 'Enter description',
+                  controller: _descriptionController,
+                  validator: notEmptyValidator,
+                  isLoading: false,
+                  minLines: 3,
+                  maxLines: 3,
+                ),
+                const SizedBox(
                   height: 30,
                 ),
               ],
@@ -168,6 +194,7 @@ class _AddCanteenState extends State<AddCanteen> {
                 'email': _emailController.text.trim(),
                 'password': _passwordController.text.trim(),
                 'phone': _phoneController.text.trim(),
+                'description': _descriptionController.text.trim(),
               };
               if (coverImage != null) {
                 details['image'] = coverImage!.bytes;

@@ -10,10 +10,12 @@ import '../../common_widget/custom_search.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   final Map<dynamic, dynamic> eventDetails;
+  final String title;
 
   const EventDetailsScreen({
     super.key,
     required this.eventDetails,
+    required this.title,
   });
 
   @override
@@ -180,8 +182,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                             ),
 
                           // Details Section
-                          const Text(
-                            'Event Details',
+                          Text(
+                            '${widget.title} Details',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -231,75 +233,72 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Text(
-                                'Events',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                  SizedBox(
+                    height: 700,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '${widget.title} Registrations',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Spacer(),
-                              SizedBox(
-                                width: 300,
-                                child: CustomSearch(
-                                  onSearch: (p0) {
-                                    params['query'] = p0;
-                                    getEvents();
-                                  },
+                                Spacer(),
+                                SizedBox(
+                                  width: 300,
+                                  child: CustomSearch(
+                                    onSearch: (p0) {
+                                      params['query'] = p0;
+                                      getEvents();
+                                    },
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          if (state is EventsLoadingState)
-                            const Center(child: CircularProgressIndicator())
-                          else if (state is EventRegistrationsGetSuccessState && _eventRegistrations.isEmpty)
-                            const Center(child: Text('No Event Registration found'))
-                          else if (state is EventRegistrationsGetSuccessState && _eventRegistrations.isNotEmpty)
-                            Expanded(
-                              child: DataTable2(
-                                columnSpacing: 12,
-                                horizontalMargin: 12,
-                                minWidth: 1400,
-                                columns: const [
-                                  DataColumn2(label: Text('Event Title'), size: ColumnSize.L),
-                                  DataColumn2(label: Text('Date')),
-                                  DataColumn2(label: Text('Venue')),
-                                  DataColumn2(label: Text('Organizer')),
-                                  DataColumn2(label: Text('Actions'), size: ColumnSize.L),
-                                ],
-                                rows: List.generate(
-                                  _eventRegistrations.length,
-                                  (index) => DataRow(cells: [
-                                    DataCell(Text(
-                                      formatValue(_eventRegistrations[index]['title']),
-                                    )),
-                                    DataCell(Text(formatDate(_eventRegistrations[index]['event_date']))),
-                                    DataCell(Text(formatValue(_eventRegistrations[index]['venu']))),
-                                    DataCell(Text(formatValue(_eventRegistrations[index]['organizer_name']))),
-                                    DataCell(Row(
-                                      children: [],
-                                    )),
-                                  ]),
+                                SizedBox(
+                                  width: 10,
                                 ),
-                              ),
+                              ],
                             ),
-                        ],
+                            const SizedBox(height: 16),
+                            if (state is EventsLoadingState)
+                              const Center(child: CircularProgressIndicator())
+                            else if (state is EventRegistrationsGetSuccessState && _eventRegistrations.isEmpty)
+                              Center(child: Text('No ${widget.title} Registration found'))
+                            else if (state is EventRegistrationsGetSuccessState && _eventRegistrations.isNotEmpty)
+                              Expanded(
+                                child: DataTable2(
+                                  columnSpacing: 12,
+                                  horizontalMargin: 12,
+                                  minWidth: 1400,
+                                  columns: const [
+                                    DataColumn2(label: Text('Name'), size: ColumnSize.L),
+                                    DataColumn2(label: Text('Gender')),
+                                    DataColumn2(label: Text('Note')),
+                                  ],
+                                  rows: List.generate(
+                                    _eventRegistrations.length,
+                                    (index) => DataRow(cells: [
+                                      DataCell(Text(
+                                        formatValue(_eventRegistrations[index]['students']['name']),
+                                      )),
+                                      DataCell(Text(formatValue(_eventRegistrations[index]['students']['gender']))),
+                                      DataCell(Text(formatValue(_eventRegistrations[index]['note']))),
+                                    ]),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

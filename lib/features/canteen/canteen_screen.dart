@@ -2,6 +2,7 @@ import 'package:collage_connect_collage/common_widget/custom_alert_dialog.dart';
 import 'package:collage_connect_collage/common_widget/custom_button.dart';
 import 'package:collage_connect_collage/common_widget/custom_label_with_text.dart';
 import 'package:collage_connect_collage/features/canteen/add_canteen.dart';
+import 'package:collage_connect_collage/features/canteen/canteen_detail_dialog.dart';
 import 'package:collage_connect_collage/util/format_function.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
@@ -211,31 +212,8 @@ class _CanteenScreenState extends State<CanteenScreen> {
                                     onPressed: () {
                                       showDialog(
                                         context: context,
-                                        builder: (context) => CustomAlertDialog(
-                                          title: 'Canteen Details',
-                                          content: Column(
-                                            children: [
-                                              ListTile(
-                                                leading: Image.network(
-                                                  _canteens[index]['image_url'],
-                                                  height: 200,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                title: Text('Name: ${_canteens[index]['name']}'),
-                                                subtitle: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text('Email: ${_canteens[index]['email']}'),
-                                                    Text('Reg. No.: ${_canteens[index]['phone']}'),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          primaryButton: 'Close',
-                                          onPrimaryPressed: () {
-                                            Navigator.pop(context);
-                                          },
+                                        builder: (context) => CanteenDetailDialog(
+                                          canteen: _canteens[index],
                                         ),
                                       );
                                     },

@@ -20,7 +20,7 @@ class CanteensBloc extends Bloc<CanteensEvent, CanteensState> {
 
         if (event is GetAllCanteensEvent) {
           PostgrestFilterBuilder<List<Map<String, dynamic>>> query =
-              table.select('*').eq('user_id', supabaseClient.auth.currentUser!.id);
+              table.select('*').eq('collage_user_id', supabaseClient.auth.currentUser!.id);
 
           if (event.params['query'] != null) {
             query = query.ilike('name', '%${event.params['query']}%');
@@ -39,6 +39,7 @@ class CanteensBloc extends Bloc<CanteensEvent, CanteensState> {
             ),
           );
           event.canteenDetails['user_id'] = response.user!.id;
+          event.canteenDetails['collage_user_id'] = supabaseClient.auth.currentUser?.id;
           event.canteenDetails.remove('password');
 
           event.canteenDetails['user_id'] = response.user?.id;

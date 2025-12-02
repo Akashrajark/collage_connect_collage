@@ -19,8 +19,10 @@ class EventsBloc extends Bloc<EventsEvent, EventsState> {
         SupabaseQueryBuilder registrationsTable = Supabase.instance.client.from('event_registrations');
 
         if (event is GetAllEventsEvent) {
-          PostgrestFilterBuilder<List<Map<String, dynamic>>> query =
-              table.select('*').eq('collage_user_id', supabaseClient.auth.currentUser!.id);
+          PostgrestFilterBuilder<List<Map<String, dynamic>>> query = table
+              .select('*')
+              .eq('collage_user_id', supabaseClient.auth.currentUser!.id)
+              .eq('type', event.params['type']);
 
           if (event.params['query'] != null) {
             query = query.ilike('title', '%${event.params['query']}%');
