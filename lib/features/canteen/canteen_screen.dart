@@ -186,7 +186,8 @@ class _CanteenScreenState extends State<CanteenScreen> {
                                             },
                                             primaryButton: 'Delete',
                                             onPrimaryPressed: () {
-                                              _canteensBloc.add(DeleteCanteenEvent(canteenId: _canteens[index]['id']));
+                                              _canteensBloc
+                                                  .add(DeleteCanteenEvent(userId: _canteens[index]['user_id']));
                                               Navigator.pop(context);
                                             },
                                           ),

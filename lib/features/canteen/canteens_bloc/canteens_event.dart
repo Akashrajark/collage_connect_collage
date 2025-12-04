@@ -26,7 +26,7 @@ class EditCanteenEvent extends CanteensEvent {
 }
 
 class DeleteCanteenEvent extends CanteensEvent {
-  final int canteenId;
+  final String userId;
 
-  DeleteCanteenEvent({required this.canteenId});
+  DeleteCanteenEvent({required this.userId});
 }

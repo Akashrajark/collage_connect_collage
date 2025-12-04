@@ -185,7 +185,9 @@ class _StudentScreenState extends State<StudentScreen> {
                                             },
                                             primaryButton: 'Delete',
                                             onPrimaryPressed: () {
-                                              _studentsBloc.add(DeleteStudentEvent(studentId: _students[index]['id']));
+                                              _studentsBloc.add(DeleteStudentEvent(
+                                                  studentId: _students[index]['id'],
+                                                  userId: _students[index]['user_id']));
                                               Navigator.pop(context);
                                             },
                                           ),

@@ -35,7 +35,10 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
               email: event.studentDetails['email'],
               password: event.studentDetails['password'],
               emailConfirm: true,
-              appMetadata: {"role": "student"},
+              appMetadata: {
+                "role": "student",
+                'collage_user_id': supabaseClient.auth.currentUser?.id,
+              },
             ),
           );
           event.studentDetails['user_id'] = response.user!.id;
@@ -70,7 +73,7 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
 
           emit(StudentsSuccessState());
         } else if (event is DeleteStudentEvent) {
-          await table.delete().eq('id', event.studentId);
+          await supabaseClient.auth.admin.deleteUser(event.userId);
           emit(StudentsSuccessState());
         } else if (event is GetStudentByCourseId) {
           PostgrestFilterBuilder<List<Map<String, dynamic>>> query = table

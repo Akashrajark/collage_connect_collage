@@ -71,7 +71,7 @@ class CanteensBloc extends Bloc<CanteensEvent, CanteensState> {
 
           emit(CanteensSuccessState());
         } else if (event is DeleteCanteenEvent) {
-          await table.delete().eq('id', event.canteenId);
+          await supabaseClient.auth.admin.deleteUser(event.userId);
           emit(CanteensSuccessState());
         }
       } catch (e, s) {
