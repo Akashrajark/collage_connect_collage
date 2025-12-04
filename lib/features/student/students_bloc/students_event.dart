@@ -26,9 +26,11 @@ class EditStudentEvent extends StudentsEvent {
 }
 
 class DeleteStudentEvent extends StudentsEvent {
-  final int studentId;
+  final String userId;
 
-  DeleteStudentEvent({required this.studentId});
+  DeleteStudentEvent({
+    required this.userId,
+  });
 }
 
 class GetStudentByCourseId extends StudentsEvent {
