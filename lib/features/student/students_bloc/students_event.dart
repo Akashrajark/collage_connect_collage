@@ -17,11 +17,11 @@ class AddStudentEvent extends StudentsEvent {
 
 class EditStudentEvent extends StudentsEvent {
   final Map<String, dynamic> studentDetails;
-  final int studentId;
+  final String studentUserId;
 
   EditStudentEvent({
     required this.studentDetails,
-    required this.studentId,
+    required this.studentUserId,
   });
 }
 

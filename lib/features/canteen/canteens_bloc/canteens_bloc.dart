@@ -55,7 +55,13 @@ class CanteensBloc extends Bloc<CanteensEvent, CanteensState> {
 
           emit(CanteensSuccessState());
         } else if (event is EditCanteenEvent) {
-          event.canteenDetails.remove('email');
+          await supabaseClient.auth.admin.updateUserById(event.canteenUserId,
+              attributes: AdminUserAttributes(
+                email: event.canteenDetails['email'],
+                password: event.canteenDetails['password'],
+                emailConfirm: true,
+                appMetadata: {"role": "canteen"},
+              ));
           event.canteenDetails.remove('password');
           if (event.canteenDetails['image'] != null) {
             event.canteenDetails['image_url'] = await uploadFile(
@@ -67,7 +73,7 @@ class CanteensBloc extends Bloc<CanteensEvent, CanteensState> {
             event.canteenDetails.remove('image_name');
           }
 
-          await table.update(event.canteenDetails).eq('id', event.canteenId);
+          await table.update(event.canteenDetails).eq('user_id', event.canteenUserId);
 
           emit(CanteensSuccessState());
         } else if (event is DeleteCanteenEvent) {

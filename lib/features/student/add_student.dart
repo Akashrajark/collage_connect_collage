@@ -139,54 +139,46 @@ class _AddStudentState extends State<AddStudent> {
                         const SizedBox(
                           height: 8,
                         ),
-                        if (widget.studentDetails == null)
-                          const Text(
-                            'Student Email ID',
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                              fontSize: 16.0,
-                            ),
-                            textAlign: TextAlign.left,
+                        const Text(
+                          'Student Email ID',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black,
+                            fontSize: 16.0,
                           ),
-                        if (widget.studentDetails == null)
-                          const SizedBox(
-                            height: 8,
+                          textAlign: TextAlign.left,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        CustomTextFormField(
+                            labelText: 'Enter student email id',
+                            controller: _emailController,
+                            validator: notEmptyValidator,
+                            isLoading: false),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        const Text(
+                          'Password',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black,
+                            fontSize: 16.0,
                           ),
-                        if (widget.studentDetails == null)
-                          CustomTextFormField(
-                              labelText: 'Enter student email id',
-                              controller: _emailController,
-                              validator: notEmptyValidator,
-                              isLoading: false),
-                        if (widget.studentDetails == null)
-                          const SizedBox(
-                            height: 8,
-                          ),
-                        if (widget.studentDetails == null)
-                          const Text(
-                            'Password',
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                              fontSize: 16.0,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        if (widget.studentDetails == null)
-                          const SizedBox(
-                            height: 8,
-                          ),
-                        if (widget.studentDetails == null)
-                          CustomTextFormField(
-                              labelText: 'Enter password',
-                              controller: _passwordController,
-                              validator: passwordValidator,
-                              isLoading: false),
-                        if (widget.studentDetails == null)
-                          const SizedBox(
-                            height: 8,
-                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        CustomTextFormField(
+                            labelText: 'Enter password',
+                            controller: _passwordController,
+                            validator: passwordValidator,
+                            isLoading: false),
+                        const SizedBox(
+                          height: 8,
+                        ),
                         const Text(
                           'Register number',
                           style: TextStyle(
@@ -289,7 +281,7 @@ class _AddStudentState extends State<AddStudent> {
                     if (widget.studentDetails != null) {
                       BlocProvider.of<StudentsBloc>(context).add(
                         EditStudentEvent(
-                          studentId: widget.studentDetails!['id'],
+                          studentUserId: widget.studentDetails!['user_id'],
                           studentDetails: details,
                         ),
                       );

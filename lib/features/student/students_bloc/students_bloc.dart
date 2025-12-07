@@ -57,8 +57,14 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
 
           emit(StudentsSuccessState());
         } else if (event is EditStudentEvent) {
+          await supabaseClient.auth.admin.updateUserById(
+            event.studentUserId,
+            attributes: AdminUserAttributes(
+              email: event.studentDetails['email'],
+              password: event.studentDetails['password'],
+            ),
+          );
           event.studentDetails.remove('password');
-          event.studentDetails.remove('email');
 
           if (event.studentDetails['image'] != null) {
             event.studentDetails['image_url'] = await uploadFile(
@@ -69,7 +75,7 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
             event.studentDetails.remove('image');
             event.studentDetails.remove('image_name');
           }
-          await table.update(event.studentDetails).eq('id', event.studentId);
+          await table.update(event.studentDetails).eq('user_id', event.studentUserId);
 
           emit(StudentsSuccessState());
         } else if (event is DeleteStudentEvent) {

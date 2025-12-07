@@ -10,7 +10,7 @@ import '../../common_widget/custom_image_picker_button.dart';
 
 class AddCanteen extends StatefulWidget {
   final Map? canteenDetails;
-  AddCanteen({
+  const AddCanteen({
     super.key,
     this.canteenDetails,
   });
@@ -56,42 +56,45 @@ class _AddCanteenState extends State<AddCanteen> {
         return CustomAlertDialog(
           title: widget.canteenDetails == null ? 'Add Canteen' : 'Edit Canteen',
           isLoading: state is CanteensLoadingState,
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomImagePickerButton(
-                  width: double.infinity,
-                  height: 200,
-                  selectedImage: widget.canteenDetails?['image_url'],
-                  onPick: (pick) {
-                    coverImage = pick;
-                    setState(() {});
-                  },
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  'Canteen Name',
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black,
-                    fontSize: 16.0,
+          content: Flexible(
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  CustomImagePickerButton(
+                    width: double.infinity,
+                    height: 200,
+                    selectedImage: widget.canteenDetails?['image_url'],
+                    onPick: (pick) {
+                      coverImage = pick;
+                      setState(() {});
+                    },
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                CustomTextFormField(
+                  SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    'Canteen Name',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  CustomTextFormField(
                     labelText: 'Enter canteen Name',
                     controller: _nameController,
                     validator: notEmptyValidator,
-                    isLoading: false),
-                if (widget.canteenDetails == null)
+                    isLoading: false,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   const Text(
                     'Canteen Email ID',
                     style: TextStyle(
@@ -101,21 +104,18 @@ class _AddCanteenState extends State<AddCanteen> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                const SizedBox(
-                  height: 8,
-                ),
-                if (widget.canteenDetails == null)
+                  const SizedBox(
+                    height: 8,
+                  ),
                   CustomTextFormField(
                     labelText: 'Enter canteen email id',
                     controller: _emailController,
                     validator: notEmptyValidator,
                     isLoading: false,
                   ),
-                if (widget.canteenDetails == null)
                   const SizedBox(
                     height: 8,
                   ),
-                if (widget.canteenDetails == null)
                   const Text(
                     'Password',
                     style: TextStyle(
@@ -125,65 +125,63 @@ class _AddCanteenState extends State<AddCanteen> {
                     ),
                     textAlign: TextAlign.left,
                   ),
-                if (widget.canteenDetails == null)
                   const SizedBox(
                     height: 8,
                   ),
-                if (widget.canteenDetails == null)
                   CustomTextFormField(
                       labelText: 'Enter password',
                       controller: _passwordController,
                       validator: passwordValidator,
                       isLoading: false),
-                if (widget.canteenDetails == null)
                   const SizedBox(
                     height: 8,
                   ),
-                const Text(
-                  'Phone Number',
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black,
-                    fontSize: 16.0,
+                  const Text(
+                    'Phone Number',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                CustomTextFormField(
-                  labelText: 'Enter phone number',
-                  controller: _phoneController,
-                  validator: notEmptyValidator,
-                  isLoading: false,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Description',
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black,
-                    fontSize: 16.0,
+                  const SizedBox(
+                    height: 8,
                   ),
-                  textAlign: TextAlign.left,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                CustomTextFormField(
-                  labelText: 'Enter description',
-                  controller: _descriptionController,
-                  validator: notEmptyValidator,
-                  isLoading: false,
-                  minLines: 3,
-                  maxLines: 3,
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-              ],
+                  CustomTextFormField(
+                    labelText: 'Enter phone number',
+                    controller: _phoneController,
+                    validator: notEmptyValidator,
+                    isLoading: false,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    'Description',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  CustomTextFormField(
+                    labelText: 'Enter description',
+                    controller: _descriptionController,
+                    validator: notEmptyValidator,
+                    isLoading: false,
+                    minLines: 3,
+                    maxLines: 3,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                ],
+              ),
             ),
           ),
           primaryButton: 'save',
@@ -204,7 +202,7 @@ class _AddCanteenState extends State<AddCanteen> {
               if (widget.canteenDetails != null) {
                 BlocProvider.of<CanteensBloc>(context).add(
                   EditCanteenEvent(
-                    canteenId: widget.canteenDetails!['id'],
+                    canteenUserId: widget.canteenDetails!['user_id'],
                     canteenDetails: details,
                   ),
                 );

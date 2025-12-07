@@ -17,11 +17,11 @@ class AddCanteenEvent extends CanteensEvent {
 
 class EditCanteenEvent extends CanteensEvent {
   final Map<String, dynamic> canteenDetails;
-  final int canteenId;
+  final String canteenUserId;
 
   EditCanteenEvent({
     required this.canteenDetails,
-    required this.canteenId,
+    required this.canteenUserId,
   });
 }
 
